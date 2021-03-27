@@ -17,10 +17,11 @@ def create_app(config=None):
     migrate.init_app(app, db)
 
     from flask_app.views.main_views import main_bp
+    from flask_app.views.member_views import member_bp
 
     app.register_blueprint(main_bp)
-    # app.register_blueprint(user_bp, url_prefix='/api')
-
+    app.register_blueprint(member_bp, url_prefix='/api')
+    
     return app
 
 if __name__ == "__main__":
