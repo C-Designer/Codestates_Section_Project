@@ -20,9 +20,10 @@ def create_app(config=None):
     from flask_app.views.member_views import member_bp
 
     app.register_blueprint(main_bp)
-    app.register_blueprint(member_bp, url_prefix='/api')
-    
+    app.register_blueprint(member_bp, url_prefix='/member')
+
     return app
+
 
 if __name__ == "__main__":
     app = create_app()

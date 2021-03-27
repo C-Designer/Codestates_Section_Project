@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template
+from flask_app.models.member_model import Member
 
-bp = Blueprint('member', __name__)
+member_bp = Blueprint('member', __name__)
 
-@bp.route('/member', methods=['POST'])
-def add_member():
+@member_bp.route('/')
+def view_list():
+    member_list = Member.query.all()
 
-    if request.method =="POST":
-        j_son = request.get('name')
-        name = j_son.get
+    return render_template('member/member_list.html', member_list=member_list), 200
