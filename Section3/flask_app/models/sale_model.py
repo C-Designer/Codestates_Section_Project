@@ -6,10 +6,13 @@ class Sale(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     is_sale = db.Column(db.Integer(), nullable=False)
     member_id = db.Column(db.Integer(), db.ForeignKey('member.id'), nullable=False)
-    trainer_id = db.Column(db.Integer(), db.ForeignKey('trainer.id'), nullable=False)
+    trainer_name = db.Column(db.String(), db.ForeignKey('trainer.name'), nullable=False)
 
     member = db.relationship('Member', backref='sale')
     trainer = db.relationship('Trainer', backref='sale')
 
     def __repr__(self):
-        return f"<Sale id:{self.id}, is_sale:{self.is_sale}, type:{self.type}>"
+        return {'id' : self.id
+                , 'is_sale' : self.is_sale
+                , 'member_id' : self.member_id
+                , 'trainer_name' : self.trainer_name}

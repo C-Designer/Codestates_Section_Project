@@ -9,6 +9,7 @@ def create_app(config=None):
     app = Flask(__name__)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sqlite3.db'
+    app.config['DEBUG'] = True
 
     if config is not None:
         app.config.update(config)
@@ -16,11 +17,11 @@ def create_app(config=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    from flask_app.views.main_views import main_bp
-    from flask_app.views.member_views import member_bp
-
-    app.register_blueprint(main_bp)
-    app.register_blueprint(member_bp, url_prefix='/member')
+    from flask_app.views import (main_views, member_views, trainer_views, sale_views)
+    app.register_blueprint(main_views.bp)
+    app.register_blueprint(member_views.bp, url_prefix='/api')
+    app.register_blueprint(trainer_views.bp, url_prefix='/api')
+    app.register_blueprint(sale_views.bp, url_prefix='/api')
 
     return app
 
