@@ -12,7 +12,4 @@ class Sale(db.Model):
     trainer = db.relationship('Trainer', backref='sale')
 
     def __repr__(self):
-        return {'id' : self.id
-                , 'is_sale' : self.is_sale
-                , 'member_id' : self.member_id
-                , 'trainer_name' : self.trainer_name}
+        return f"{self.id}"

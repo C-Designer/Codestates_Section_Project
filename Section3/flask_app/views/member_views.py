@@ -27,15 +27,22 @@ def add_member():
             confidence = int(request.form['confidence'])
             culture = int(request.form['culture'])
         except:
-            return "Needs options", 400
+            return "모든 값을 올바르게 기입하여 주세요.  <a href='/member'>돌아가기</a>", 400
 
         member = Member(id=id, sex=sex, age=age, real=real, roman=roman, human=human, ideal=ideal, agent=agent, relation=relation, trust=trust, manual=manual, confidence=confidence, culture=culture)
         raw_member = Member.query.filter(Member.id == id).first()
+        sales = None
         # id를 확인하여 이미 있는 회원인지 확인
         if raw_member:
-            db.session.delete(raw_member)
-        
+            sales = Sale.query.filter(Sale.member_id == raw_member.id).all()
+            delete_member(raw_member.id)
+            
         db.session.add(member)
+        if sales:
+            for s in sales:
+                sale = Sale(id=s.id, is_sale=s.is_sale, trainer_name=s.trainer_name, member_id=s.member_id)
+                db.session.add(sale)
+
         db.session.commit()
         return redirect(url_for('main.member_index'), code=200)
 

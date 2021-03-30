@@ -20,6 +20,4 @@ class Trainer(db.Model):
     culture = db.Column(db.Integer(), nullable=False)
 
     def __repr__(self):
-        return {'name' : self.name
-                , 'sex' : self.sex
-                , 'age' : self.age}
+        return f"{self.name}, {self.culture}"

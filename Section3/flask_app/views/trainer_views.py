@@ -32,11 +32,18 @@ def add_trainer():
 
         trainer = Trainer(name=name, sex=sex, age=age, real=real, roman=roman, human=human, ideal=ideal, agent=agent, relation=relation, trust=trust, manual=manual, confidence=confidence, culture=culture)
         raw_trainer = Trainer.query.filter(Trainer.name == name).first()
+        sales = None
         # id를 확인하여 이미 있는 회원인지 확인
         if raw_trainer:
-            db.session.delete(raw_trainer)
-        
+            sales = Sale.query.filter(Sale.trainer_name == raw_trainer.name).all()
+            delete_trainer(raw_trainer.name)
+            
         db.session.add(trainer)
+        if sales:
+            for s in sales:
+                sale = Sale(id=s.id, is_sale=s.is_sale, member_id=s.member_id, trainer_name=s.trainer_name)
+                db.session.add(sale)
+
         db.session.commit()
         return redirect(url_for('main.trainer_index'), code=200)
 

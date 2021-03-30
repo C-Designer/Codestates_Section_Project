@@ -17,11 +17,12 @@ def create_app(config=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    from flask_app.views import (main_views, member_views, trainer_views, sale_views)
+    from flask_app.views import (main_views, member_views, trainer_views, sale_views, predict_views)
     app.register_blueprint(main_views.bp)
     app.register_blueprint(member_views.bp, url_prefix='/api')
     app.register_blueprint(trainer_views.bp, url_prefix='/api')
     app.register_blueprint(sale_views.bp, url_prefix='/api')
+    app.register_blueprint(predict_views.bp, url_prefix='/api')
 
     return app
 

@@ -13,7 +13,7 @@ Trainer List
 {% endblock %}
 
 {% block lead %}
-트레이너들을 조회, 추가, 및 삭제하는 페이지입니다.
+트레이너 추가, 수정 및 삭제하는 페이지입니다.
 {% endblock %}
 
 {% block main_body %}
@@ -43,7 +43,7 @@ Trainer List
     <input name="confidence" class="form-control" type="number" min='0' max='100' placeholder="confidence" required>
     <input name="culture" class="form-control" type="number" min='0' max='100' placeholder="Culture" required>
   </div>
-  <input type="submit" class="btn btn-secondary" value="추가 및 변경">
+  <input type="submit" class="btn btn-secondary" value="추가 및 수정">
 </form>
 
 {% if trainers %}

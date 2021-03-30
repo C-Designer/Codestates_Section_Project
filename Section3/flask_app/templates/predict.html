@@ -1,37 +1,49 @@
 {% extends 'base.html' %}
 
+
 {% block title  %}
-Compare User
+Prediction
 {% endblock  %}
 
 {% block lead  %}
-To compare press the button
+회원의 계약 난이도 및 매칭 성공율을 예측하는 페이지입니다.
 {% endblock  %}
 
 {% block main_body  %}
-<form method="POST" action="/compare">
-  <div class="form-group">
-    <label for="exampleFormControlSelect1">User 1</label>
-    <select name="user_1" class="form-control" id="exampleFormControlSelect1">
-      {% for user in users %}
-      <option value={{user.id}}>{{user.username}}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="exampleFormControlSelect1">User 2</label>
-    <select name="user_2" class="form-control" id="exampleFormControlSelect1">
-      {% for user in users %}
-      <option value={{user.id}}>{{user.username}}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <label>Text to compare</label>
-  <input name="compare_text" style="margin-bottom:10px" class="form-control" type="text" />
-  <input type="submit" class="btn btn-primary" value="Compare" />
+
+<hr>
+<a href="/api/learning"><input type="submit" class="btn btn-secondary" value="데이터 최신화"></a>
+<br>
+<br>
+<form method="POST" action="/api/pred">
+    <div class="input-group mb-3">
+        <input name="member_id" class="form-control" type="number" placeholder="회원 번호" required>
+        <input type="submit" class="btn btn-outline-secondary" value="pred">
+    </div>
 </form>
 
+<hr>
 {% if prediction %}
-{{ prediction }}
+계약 난이도 : {{ prediction }}
 {% endif %}
+
+{% if trainers %}
+<table class="table table-sm text-center table-hover" style="border-bottom: 1px solid darkgray;">
+  <thead class="table-secondary">
+      <tr>
+        <th scope="col">순위</th>
+        <th scope="col" style="border-left: 2px solid darkgray;">트레이너</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for trainer in trainers %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td style="border-left: 2px solid darkgray;">{{ trainer[0] }} ({{ trainer[1] }})</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
 {% endblock  %}

@@ -20,6 +20,4 @@ class Member(db.Model):
     culture = db.Column(db.Integer(), nullable=False)
     
     def __repr__(self):
-        return {'id' : self.id
-                , 'sex' : self.sex
-                , 'age' : self.age}
+        return f"id : {self.id}"

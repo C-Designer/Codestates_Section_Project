@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template,request
+from flask import Blueprint, render_template, redirect, request
 from flask_paginate import Pagination, get_page_parameter
+from flask_app.models.machine_model import Machine
 from flask_app.models.sale_model import Sale
 from flask_app.models.member_model import Member
 from flask_app.models.trainer_model import Trainer
@@ -12,6 +13,12 @@ bp = Blueprint('main', __name__)
 def index():
     return render_template('index.html'), 200
 
+
+@bp.route('/predict')
+def predict_index():
+    return render_template('predict.html'), 200
+
+
 @bp.route('/member/')
 def member_index():
     page = request.args.get('page', 1, type=int)
@@ -19,12 +26,14 @@ def member_index():
 
     return render_template('member.html', members=members)
 
+
 @bp.route('/trainer')
 def trainer_index():
     page = request.args.get('page', 1, type=int)
     trainers = Trainer.query.paginate(page=page, per_page=10)
 
     return render_template('trainer.html', trainers=trainers)
+
 
 @bp.route('/sale')
 def sale_index():
@@ -34,10 +43,19 @@ def sale_index():
 
     return render_template('sale.html', sales=sales, trainers=trainers)
 
-@bp.route('/predict')
-def predict_index():
-    prediction = 0
-    return render_template('predict.html', prediction=prediction)
+@bp.route('/sale/search/', methods=['POST'])
+def search():
+
+    trainer_name = str(request.form['trainer_name'])
+    if not trainer_name:
+        return "None", 400
+
+    page = request.args.get('page', 1, type=int)
+    sales = Sale.query.filter(Sale.trainer_name == trainer_name).paginate(page=page, per_page=10)
+    trainers = Trainer.query.all()
+
+    return render_template('sale.html', sales=sales, trainers=trainers)
+    
 
 @bp.route('/data')
 def insert_data():
@@ -60,7 +78,7 @@ def insert_data():
         db.session.add(member)
 
     # trainer
-    name = ['bj', 'tom', 'kevin', 'hani', 'jason', 'jerry', 'jerome', 'baro', 'peter', 'kelly']
+    name = ['cd', 'bj', 'tom', 'kevin', 'chris', 'hani', 'jason', 'jerry', 'jerome', 'baro', 'peter', 'kelly', 'jun']
 
     li = []
     for n in name:
@@ -82,9 +100,12 @@ def insert_data():
 
     # sale
     for i in range(0, 100000):
-        is_sale = np.random.randint(0, 2)
+        if i < 30000:
+            is_sale = 1
+        else:
+            is_sale = 0
         trainer_name = name[np.random.randint(0, len(name))]
-        member_id = np.random.randint(0, 1000)
+        member_id = np.random.randint(1, 1000)
         
         sale = Sale(is_sale=is_sale, trainer_name=trainer_name, member_id=member_id)
         db.session.add(sale)
